@@ -42,11 +42,10 @@ class BuildPlaylistWorker
       spotify_playlist.change_details!(description: "Created with PLYLST.app! #{playlist.translated_rules}", public: playlist.public)
 
       if total <= 0 or playlist.auto_update.present?
-        tracks = playlist.filtered_tracks(user).pluck(:id)
-        playlist.update_attributes(track_cache: tracks)
+        tracks = playlist.filtered_tracks(user).pluck(:id, :spotify_id)
+        playlist.update_attributes(track_cache: tracks.map { |i| i[0] })
 
-        tracks_formatted = Track.where(id: tracks).pluck(:spotify_id)
-        tracks_formatted_ids = tracks_formatted.map{|x| x.prepend('spotify:track:')}
+        tracks_formatted_ids = tracks.map { |i| i[1] }.map{|x| x.prepend('spotify:track:')}
 
         # Divide tracks in to groups of 100, due to Spotify API limit
         tracks_formatted_ids.each_slice(100) do |group|
