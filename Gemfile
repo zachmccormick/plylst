@@ -56,6 +56,9 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+# ddtrace so i can trace stuff easier
+gem 'ddtrace'
+
 gem 'dalli'
 
 # Reduces boot times through caching; required in config/boot.rb
